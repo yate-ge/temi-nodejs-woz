@@ -1,5 +1,5 @@
 import WebSocket from "ws";
-import ws, { eventemitter } from './ws.js';
+import {ws, eventemitter, msg_id } from './ws.js';
 import generateUUID from "./generateUUID.js";
 //import { eventemitter } from './ws.js';
 
@@ -45,8 +45,10 @@ export default class Robot {
             id: generateUUID()
         };
         const jsonMessage = JSON.stringify(message);
-        ws.ask_id = message.id;
+        msg_id.ask = message.id;
+        console.debug("ask_id: " + msg_id.ask);
         ws.send(jsonMessage);
+        console.log('send message: ' + jsonMessage);
         
 
         return new Promise((resolve, reject) => {
@@ -63,6 +65,41 @@ export default class Robot {
             }, 10000);
         });
     }
+
+    // 该方法将输入的sentence通过weboskcet发送到机器人，通过promise等待机器人的回复，然后将机器人回复的文本返回
+    async ask2(sentence) {
+        const message = {
+            command: 'ask',
+            sentence,
+            id: generateUUID()
+        };
+        const jsonMessage = JSON.stringify(message);
+        ws.ask_id = message.id;
+        ws.send(jsonMessage);
+        console.log('send message: ' + jsonMessage);
+
+        // promise = new Promise((resolve, reject) => {
+        //     eventemitter.on("replyEvent", (reply) => {
+        //         console.log("replyEvent: " + reply);
+        //         resolve(reply);
+        //     });
+        // });
+        let reply = "no reply";
+        // 通过eventemitter监听replyEvent事件，当事件触发时，将机器人回复的文本赋值给reply
+        eventemitter.on("replyEvent", (reply) => {
+            console.log("replyEvent: " + reply);
+            reply = reply;
+        });
+        // 等待10秒，如果10秒内没有收到机器人的回复，就返回reply
+        await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, 10000);
+        });
+        return reply;
+    }
+
+
 
     goto(location) {
         const message = {
@@ -176,6 +213,12 @@ export default class Robot {
     }
 
 
-    
+    wait(delay) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, delay);
+        });
+    }
 
 }
