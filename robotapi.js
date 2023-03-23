@@ -109,6 +109,22 @@ export default class Robot {
         };
         const jsonMessage = JSON.stringify(message);
         ws.send(jsonMessage);
+        console.log('send message: ' + jsonMessage);
+        msg_id.goto = message.id;
+
+        return new Promise((resolve, reject) => {
+            eventemitter.on("gotoEvent", () => {
+                console.log("goto complete");
+                resolve();
+            });
+            
+            // setTimeout(() => {
+            //     resolve("goto timeout");
+            // }, 30000);
+        })
+
+
+
     }
 
     tilt(angle) {

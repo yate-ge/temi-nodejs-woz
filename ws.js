@@ -34,12 +34,6 @@ ws.on('message', function(data) {
   let json = {};
   try {
     json = JSON.parse(data);
-    // print json data
-    console.log(json.reply);
-    console.log(json.id);
-    console.log(msg_id.ask);
-
-
 
     //
     //判断是否是事件
@@ -53,6 +47,11 @@ ws.on('message', function(data) {
     if (json.reply && json.id == msg_id.ask) {
       console.log("触发reply事件");
       eventemitter.emit("replyEvent", json.reply);
+    }
+
+    if (json.id == msg_id.goto) {
+      console.log("触发goto完成事件");
+      eventemitter.emit("gotoEvent", json.state);
     }
 
   } catch (e) {

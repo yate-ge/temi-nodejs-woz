@@ -5,24 +5,7 @@ import {
     eventemitter
 } from './ws.js';
 
-// const speak = (sentence) => {
-//     const message = {
-//         command: 'speak',
-//         sentence,
-//         id: '0'
-//     };
-//     const jsonMessage = JSON.stringify(message);
-//     socket.send(jsonMessage);
-// }
 
-// const speakButton = document.getElementById('speak-button');
-
-
-//等待五秒后，speak("鸡你太美");
-// setTimeout(() => {
-//     speak("鸡你太美");
-// }
-//     , 5000);
 
 const robot = new Robot();
 
@@ -39,10 +22,16 @@ await robot.wait(3000);
 // ])
 
 
-    
 
 
 
-let reply = await robot.ask("你叫什么名字？");
-console.log("reply: " + reply);
-await robot.speak("你好，" + reply);
+
+
+await Promise.all([
+    robot.speak("正在前往葛亚特的座位"),
+    robot.goto("葛亚特的座位")
+])
+await robot.speak("已到达");
+
+
+
