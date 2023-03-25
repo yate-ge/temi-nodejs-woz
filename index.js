@@ -14,24 +14,24 @@ const robot = new Robot();
 //     robotAction();
 // }), 3000);
 
-
 await robot.wait(3000);
-// await Promise.all([
-//     robot.speak("正在前往胡源达的座位"),
-//     robot.goto("胡源达的座位")
-// ])
 
 
+greetUser();
 
-
-
-
-
-await Promise.all([
-    robot.speak("正在前往葛亚特的座位"),
-    robot.goto("葛亚特的座位")
-])
-await robot.speak("已到达");
+async function greetUser() {
+    await robot.detectHuman();
+    const currentTime = new Date().getHours();
+    let greeting;
+    if (currentTime >= 5 && currentTime < 12) {
+      greeting = "Good morning";
+    } else if (currentTime >= 12 && currentTime < 17) {
+      greeting = "Good afternoon";
+    } else {
+      greeting = "What's up";
+    }
+    await robot.speak(greeting);
+}
 
 
 

@@ -6,7 +6,7 @@ import { stringify } from 'querystring';
 
 
 export const eventemitter = new events.EventEmitter();
-export const ws = new WebSocket('ws://192.168.123.10:8175');
+export const ws = new WebSocket('ws://localhost:8175');
 
 // export let goto_id = 0;
 // export let ask_id = 0;
@@ -21,7 +21,7 @@ ws.on('open', function() {
   const message = {
     command: 'speak',
     sentence: '连接成功',
-    id: '000000'
+    id: 'connect_id'
   };
   const jsonMessage = JSON.stringify(message);
   ws.send(jsonMessage);
