@@ -14,6 +14,16 @@ export default class Robot {
     }
 
     //let reply = "no reply";
+    display(url) {
+        const message = {
+            command: 'openURL',
+            url,
+            id: generateUUID()
+        };
+        const jsonMessage = JSON.stringify(message);
+        ws.send(jsonMessage);
+        console.log('send message: ' + jsonMessage);
+    }
 
     speak(sentence) {
         const message = {
@@ -24,14 +34,14 @@ export default class Robot {
         const jsonMessage = JSON.stringify(message);
         ws.send(jsonMessage);
         console.log('send message: ' + jsonMessage);
+        msg_id.speak = message.id;
 
 
 
-        // 按照文本长度决定等待时间
         return new Promise((resolve, reject) => {
-            setTimeout(() => {
+            eventemitter.on("speakEvent", () => {
                 resolve();
-            }, sentence.length*300);
+            });           
         });
 
 
@@ -220,12 +230,30 @@ export default class Robot {
         ws.send(jsonMessage);
     }
 
+    // detectHuman() {
+    //     return new Promise((resolve, reject) => {
+    //         eventemitter.on("humanDetected", () => {
+    //             resolve();
+    //         });
+    //     });
+    // }
+
+    // 用bewithme接口实现，从而可以手动关闭检测模式
     detectHuman() {
+        const message = {
+            command: 'beWithMe',
+            id: generateUUID()
+        };
+        const jsonMessage = JSON.stringify(message);
+        ws.send(jsonMessage);
+
         return new Promise((resolve, reject) => {
-            eventemitter.on("humanDetected", () => {
+            eventemitter.on("humanDetectedonBeWithMe", () => {
+                this.stopMovement();
                 resolve();
             });
         });
+
     }
 
 
