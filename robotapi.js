@@ -248,10 +248,19 @@ export default class Robot {
         ws.send(jsonMessage);
 
         return new Promise((resolve, reject) => {
+
             eventemitter.on("humanDetectedonBeWithMe", () => {
                 this.stopMovement();
-                resolve();
+                resolve(true);
             });
+
+            // 10秒后自动关闭检测模式
+            setTimeout(() => {
+                this.stopMovement();
+                reject(false);
+            }, 5000);
+
+
         });
 
     }
