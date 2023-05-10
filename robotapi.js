@@ -202,13 +202,32 @@ export default class Robot {
         ws.send(jsonMessage);
     }
 
-    wakeup() {
-        const message = {
-            command: 'wakeup',
-            id: generateUUID()
-        };
-        const jsonMessage = JSON.stringify(message);
-        ws.send(jsonMessage);
+    // wakeup() {
+    //     const message = {
+    //         command: 'wakeup',
+    //         id: generateUUID()
+    //     };
+    //     const jsonMessage = JSON.stringify(message);
+    //     ws.send(jsonMessage);
+    // }
+
+    userRequest(task) {
+        //监听'wakeup'事件，在事件触发后，将promise的状态改为resolve，返回promise,值为用户输入内容。
+        return new Promise((resolve, reject) => {
+            eventemitter.on("wakeupEvent", (reply) => {
+                this.reply = reply;
+                if (this.reply == task) {
+                    console.log("wakeup: " + this.reply);
+                    resolve(this.reply);
+                } else {
+                    resolve("no wakeup")
+                }
+
+            });
+        }
+        );
+
+
     }
 
     setDetectionMode(on) {
@@ -239,7 +258,7 @@ export default class Robot {
     // }
 
     // 用bewithme接口实现，从而可以手动关闭检测模式
-    detectHuman() {
+    detectHuman(duration) {
         const message = {
             command: 'beWithMe',
             id: generateUUID()
@@ -247,30 +266,28 @@ export default class Robot {
         const jsonMessage = JSON.stringify(message);
         ws.send(jsonMessage);
 
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
 
             eventemitter.on("humanDetectedonBeWithMe", () => {
                 this.stopMovement();
                 resolve(true);
             });
 
-            // 10秒后自动关闭检测模式
-            setTimeout(() => {
-                this.stopMovement();
-                reject(false);
-            }, 5000);
-
-
+            if (duration) {
+                setTimeout(() => {
+                    this.stopMovement();
+                    resolve(false);
+                }, duration*1000);
+            }
         });
-
     }
 
 
-    wait(delay) {
+    wait(duration) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 resolve();
-            }, delay);
+            }, duration*1000);
         });
     }
 

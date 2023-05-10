@@ -55,6 +55,11 @@ ws.on('message', function(data) {
       console.log("触发reply事件");
       eventemitter.emit("replyEvent", json.reply);
     }
+    // 处理用户唤醒temi时的输入，由于返回的结果都是用户返回的内容，如果是askquestion回复的话，会有对应的id。所以如果id不匹配的话，可以认为是 temi唤醒时用户的输入。
+    if (json.reply && json.id != msg_id.ask) {
+      console.log("触发wakeup事件");
+      eventemitter.emit("wakeupEvent", json.reply);
+    }
 
     if (json.id == msg_id.goto) {
       console.log("触发goto完成事件");
@@ -66,6 +71,8 @@ ws.on('message', function(data) {
       eventemitter.emit("humanDetectedonBeWithMe", json.status);
     }
 
+
+    
 
   } catch (e) {
     //console.log("无法解析json: " + data);

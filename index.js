@@ -14,24 +14,18 @@ const robot = new Robot();
 //     robotAction();
 // }), 3000);
 
-await robot.wait(3000);
+await robot.wait(1);
 
 
-greetUser();
 
-async function greetUser() {
-    await robot.detectHuman();
-    const currentTime = new Date().getHours();
-    let greeting;
-    if (currentTime >= 5 && currentTime < 12) {
-      greeting = "Good morning";
-    } else if (currentTime >= 12 && currentTime < 17) {
-      greeting = "Good afternoon";
-    } else {
-      greeting = "What's up";
-    }
-    await robot.speak(greeting);
+await robot.userRequest("导航任务");
+await robot.speak("开始执行导航任务");
+const target = await robot.ask("请问您要去哪里？");
+if (target == "客厅") {
+  await robot.goto("客厅");
+  await robot.speak("已到达客厅");
 }
+
 
 
 
