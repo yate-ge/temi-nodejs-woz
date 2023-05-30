@@ -268,7 +268,7 @@ export default class Robot {
     // }
 
     // 用bewithme接口实现，从而可以手动关闭检测模式
-    detectHuman(duration) {
+    detectHuman() {
         const message = {
             command: 'beWithMe',
             id: generateUUID()
@@ -283,12 +283,17 @@ export default class Robot {
                 resolve(true);
             });
 
-            if (duration) {
-                setTimeout(() => {
-                    this.stopMovement();
-                    resolve(false);
-                }, duration*1000);
-            }
+            setTimeout(() => {
+                this.stopMovement();
+                resolve(false);
+            }, 5000);           
+
+            // if (duration) {
+            //     setTimeout(() => {
+            //         this.stopMovement();
+            //         resolve(false);
+            //     }, duration*1000);
+            // }
         });
     }
 
