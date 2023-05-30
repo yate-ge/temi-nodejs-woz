@@ -227,6 +227,16 @@ export default class Robot {
         }
         );
 
+    }
+    customRequest() {
+        return new Promise((resolve, reject) => {
+            eventemitter.on("wakeupEvent", (reply) => {
+                this.reply = reply;
+                console.log("wakeup: " + this.reply);
+                resolve(this.reply);
+            });
+        }
+        );
 
     }
 
@@ -289,6 +299,10 @@ export default class Robot {
                 resolve();
             }, duration*1000);
         });
+    }
+
+    end() {
+        console.log("end");
     }
 
 }
