@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mermaid Flow and Chat Interface</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
+</head>
+<body>
+    <div id="container">
+        <div id="mermaidFlow">
+          <pre class="mermaid">
+              graph LR 
+              A --- B 
+              B-->C[fa:fa-ban forbidden] 
+              B-->D(fa:fa-spinner);
+          </pre>
+
+          <pre class="mermaid">
+              graph TD 
+              A[Client] --> B[Load Balancer] 
+              B --> C[Server1] 
+              B --> D[Server2]
+          </pre>
+
+
+
+        </div>
+        <div id="chatInterface">
+            chat interface!
+        </div>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

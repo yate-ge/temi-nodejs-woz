@@ -1,0 +1,37 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#container {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    height: 100%;
+}
+
+#mermaidFlow {
+    flex: 2;
+    height: 100%;
+    overflow: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#chatInterface {
+    flex: 1;
+    height: 100%;
+    overflow: auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#mermaidFlow {
+    border-right: 1px solid #000;
+}
+
+#chatInterface {
+    border-left: 1px solid #000;
+}
