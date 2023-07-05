@@ -45,13 +45,3 @@ function runUserScript() {
         console.error('An error occurred while running the user script:', err);
     });
 }
-
-// 读取 userscript.js 的内容
-// const userScriptContent = fs.readFileSync('./GPT2Temi/userscript.js', 'utf8');
-
-// const sandbox = {
-//     robot: robot,
-// };
-
-// vm.createContext(sandbox);
-// vm.runInContext(userScriptContent, sandbox);
