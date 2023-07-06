@@ -3,6 +3,12 @@ import express from 'express';
 import axios from 'axios-https-proxy-fix';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import vm from 'vm';
+import runUserScript from '../GPT2Temi/js2temiService.js';
+
+
+
 dotenv.config();
 const app = express();
 const port = process.env.API_PORT || 3001;
@@ -547,10 +553,10 @@ await robot.goto('客厅');
 await robot.speak(target + '在座位上。');`
 
 //code context
-const originalCode = req.body.text ||default_originalCode
+      const originalCode = req.body.origin;
 
 //
-const modifiedCode =req.body.text || default_modifiedCode
+      const modifiedCode = req.body.modified;
 
     //gpt规则设定
     const gpt_explainModifiedJS_system_set=`
@@ -598,6 +604,29 @@ const modifiedCode =req.body.text || default_modifiedCode
   }
 }
 
+
+async function js2temi(req,res) {
+  //const text = req.body.text || 'hi';
+    try {
+      
+        const jscode = req.body.text || `
+          robot.speak('部署失败，请检查代码');
+        `
+
+    // 将 JavaScript 代码写入 userscript.js 文件
+        fs.writeFileSync('./GPT2Temi/userscript.js', jscode, 'utf8');
+        
+        // 运行代码
+        runUserScript();
+
+        res.send('部署成功');
+
+    } catch (error) {
+        console.error('error while setting code to temi', error);
+        res.status(500).send('error while getting openai chat message');
+    }
+}
+
 // 设置路由
 
 app.use(cors());
@@ -617,7 +646,8 @@ APIs.post('/nl2js', nl2js); //注册在/APIs/nl2js
 APIs.post('/nl2jswithContext',nl2jswithContext);
 APIs.post('/js2flow',js2flow);
 APIs.post('/js2NLexplain',js2NLexplain);
-APIs.post('/explainModifiedJS',explainModifiedJS);
+APIs.post('/explainModifiedJS', explainModifiedJS);
+APIs.post('/js2temi', js2temi);
 // 启动服务器
 app.listen(port,'0.0.0.0', () => {
   console.log(`Server listening at http://localhost:${port}`);

@@ -1,25 +1,7 @@
-const members = ['小明', '小绿', '小白'];
-const availableMembers = [];
-let reply = '';
+await robot.userRequest('打招呼');
 
-await robot.userRequest('预约开组会');
+const greetings = ['你好', '您好', '早上好', '下午好', '晚上好'];
+const randomIndex = Math.floor(Math.random() * greetings.length);
+const greeting = greetings[randomIndex];
 
-for (let i = 0; i < members.length; i++) {
-  await robot.goto(members[i] + '的座位');
-  const isPresent = await robot.detectHuman();
-  if (isPresent) {
-    const isAvailable = await robot.ask('您好，' + members[i] + '，您现在有时间参加组会吗？');
-    if (isAvailable === '有的') {
-      availableMembers.push(members[i]);
-    }
-  }
-}
-
-if (availableMembers.length > 0) {
-  reply = '以下成员有时间参加组会：' + availableMembers.join('、');
-} else {
-  reply = '很遗憾，目前没有成员有时间参加组会。';
-}
-
-await robot.goto('客厅');
-await robot.speak(reply);
+await robot.speak(greeting + '，欢迎来到实验室。我是机器人小助手，请问有什么可以帮助您的吗？');
